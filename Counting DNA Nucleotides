@@ -1,0 +1,12 @@
+#PATH is location of downloaded input file
+def parse():
+    file = open(PATH, 'r')
+    lines = file.read()
+    lines = ''.join(lines.split('\n'))
+    file.close()
+    return lines
+    
+acgt = {'A':0, 'C':0, 'G':0, 'T':0}
+for i in parse():
+    acgt[i]+=1
+print(acgt)
