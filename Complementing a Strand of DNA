@@ -1,0 +1,14 @@
+'''
+Given: A DNA string s of length at most 1000 bp.
+
+Return: The reverse complement sc of s.
+'''
+
+def reverse_compliment():
+    file = open('rosalind_revc.txt', 'r')
+    s = ''.join(file.read().split('\n'))
+    file.close()
+    comp = {'A':'T', 'C':'G', 'G':'C', 'T':'A'}
+    s_comp = [comp[i] for i in s]
+    s_comp.reverse()
+    return ''.join(s_comp)
