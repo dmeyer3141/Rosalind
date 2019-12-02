@@ -1,0 +1,17 @@
+'''
+Given: A DNA string t having length at most 1000 nt.
+
+Return: The transcribed RNA string of t.
+'''
+
+def transcribe():
+    file = open('rosalind_rna.txt', 'r')
+    t = ''.join(file.read().split('\n'))
+    file.close()
+    
+    rna = list(t)
+    for i in range(len(rna)):
+        if rna[i] in 'Tt':
+            rna[i] = 'U'
+    
+    return ''.join(rna)
