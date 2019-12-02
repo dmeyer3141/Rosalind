@@ -1,9 +1,10 @@
-file = open('C:/Users/Douglas/Downloads/rosalind_dna.txt', 'r')
-seq = file.read().lower()
-file.close()
+def counting_DNA():
+    file = open('C:/Users/Douglas/Downloads/rosalind_dna.txt', 'r')
+    seq = file.read().lower()
+    file.close()
 
-counts = {'a':0, 'c':0, 'g':0, 't':0}
-for ind in seq:
-    if ind in counts:
-        counts[ind]+=1
-print(counts['a'], counts['c'], counts['t'], counts['g'])
+    counts = {'a':0, 'c':0, 'g':0, 't':0}
+    for ind in seq:
+        if ind in counts:
+            counts[ind]+=1
+    return ' '.join([str(counts[i]) for i in 'actg'])
