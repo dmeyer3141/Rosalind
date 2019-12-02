@@ -1,12 +1,9 @@
-#PATH is location of downloaded input file
-def parse():
-    file = open(PATH, 'r')
-    lines = file.read()
-    lines = ''.join(lines.split('\n'))
-    file.close()
-    return lines
-    
-acgt = {'A':0, 'C':0, 'G':0, 'T':0}
-for i in parse():
-    acgt[i]+=1
-print(acgt)
+file = open('C:/Users/Douglas/Downloads/rosalind_dna.txt', 'r')
+seq = file.read().lower()
+file.close()
+
+counts = {'a':0, 'c':0, 'g':0, 't':0}
+for ind in seq:
+    if ind in counts:
+        counts[ind]+=1
+print(counts['a'], counts['c'], counts['t'], counts['g'])
