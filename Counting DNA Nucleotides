@@ -1,0 +1,15 @@
+'''
+Given: A DNA string s of length at most 1000 nt.
+
+Return: Four integers (separated by spaces) counting the respective number of times that the symbols 'A', 'C', 'G', and 'T' occur in s.
+'''
+def counting_DNA():
+    file = open('rosalind_dna.txt', 'r')
+    seq = file.read().lower()
+    file.close()
+
+    counts = {'a':0, 'c':0, 'g':0, 't':0}
+    for ind in seq:
+        if ind in counts:
+            counts[ind]+=1
+    return ' '.join([str(counts[i]) for i in 'actg'])
