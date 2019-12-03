@@ -1,0 +1,14 @@
+'''
+Given: Three positive integers k, m, and n, representing a population containing k+m+n organisms: k individuals are homozygous dominant for a factor, m are heterozygous, and n are homozygous recessive.
+
+Return: The probability that two randomly selected mating organisms will produce an individual possessing a dominant allele (and thus displaying the dominant phenotype). Assume that any two organisms can mate.
+'''
+
+def dom_prob(k,m,n):
+    pop = k+m+n
+    
+#prob of dominant allele = 1 - prob of only recessive alleles    
+#             p(Xx Xx->xx) + p(Xx xx ->xx) + p(xx xx ->xx)
+    return 1- (m*(m-1)*.25 + 2*m*n*.5      + n*(n-1))      /(pop*(pop-1))
+
+dom_prob(24,18,21)
