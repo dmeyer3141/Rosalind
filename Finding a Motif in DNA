@@ -1,0 +1,19 @@
+'''
+Given: Two DNA strings s and t (each of length at most 1 kbp).
+
+Return: All locations of t as a substring of s.
+
+not 0 indexed!!!
+'''
+
+def motif():
+    file = open('rosalind_subs.txt', 'r')
+    seqs = file.read().split('\n')[:2]
+    file.close()
+    
+    locs = []
+    for i in range(len(seqs[0])):
+        if seqs[0][i:i+len(seqs[1])] == seqs[1]:
+            locs.append(str(i+1)) #convert 0-index to 1-index
+    
+    return ' '.join(locs)
