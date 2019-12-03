@@ -1,0 +1,22 @@
+'''
+Given: Positive integers n≤100 and m≤20.
+
+Return: The total number of pairs of rabbits that will remain after the n-th month if all rabbits live for m months.
+'''
+
+def rabbits(n,m):
+    #    month:  [babies, adults]
+    rab = {1  :  [  1   ,   0   ]}
+    
+    #in month i:
+    #a pair of babies is produced by each adult pair in month i-1
+    #all baby pairs from previous month become adult pairs
+    #an adult pair dies for every baby pair in month i-m
+    for i in range(2,n+1):
+        babies = rab[i-1][1]
+        adults = rab[i-1][0]+rab[i-1][1]
+        if i-m in rab:
+            adults-= rab[i-m][0]
+        rab[i] = [babies,adults]
+        
+    return sum(rab[n])
