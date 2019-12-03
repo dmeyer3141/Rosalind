@@ -1,0 +1,26 @@
+'''
+Given: At most 10 DNA strings in FASTA format (of length at most 1 kbp each).
+
+Return: The ID of the string having the highest GC-content, followed by the GC-content of that string.
+'''
+
+def highest_gc():
+    def gc(seq):
+        return (seq.count('G') + seq.count('C'))/len(seq)
+    
+    file = open('C:/Users/Douglas/Downloads/rosalind_gc.txt', 'r')
+    seqs = ''.join(file.read().split('\n')).split('>')[1:]
+    file.close()
+    
+    max_id = '????'
+    max_gc = 0
+    for seq in seqs:
+        #seq format: 'Rosalind_????NNN...'
+        #???? is the 4 digit code for the sequence
+        #NNN... is the sequence itself
+        gc_pct = gc(seq[13:])
+        if gc_pct > max_gc:
+            max_gc = gc_pct
+            max_id = seq[:13]
+    
+    return max_id, 100*max_gc
