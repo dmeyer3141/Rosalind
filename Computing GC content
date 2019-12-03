@@ -8,7 +8,7 @@ def highest_gc():
     def gc(seq):
         return (seq.count('G') + seq.count('C'))/len(seq)
     
-    file = open('C:/Users/Douglas/Downloads/rosalind_gc.txt', 'r')
+    file = open('rosalind_gc.txt', 'r')
     seqs = ''.join(file.read().split('\n')).split('>')[1:]
     file.close()
     
