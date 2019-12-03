@@ -1,0 +1,21 @@
+import re
+def consensus():
+    file = open('rosalind_cons.txt', 'r')
+    text = ''.join(file.read().split('\n'))
+    seqs = re.split('>Rosalind_[0-9]*', text)[1:]
+    file.close()
+    
+    temp = [0]*len(seqs[0])
+    counts = {i:temp.copy() for i in 'ACGT'}
+    consensus = ['']*len(seqs[0])
+    
+    for i in range(len(seqs[0])):
+        #update ACGT counts at this position
+        for j in range(len(seqs)):
+            counts[seqs[j][i]][i]+=1
+        
+        #select most frequent base pair; add to consensus     
+        temp = sorted([(counts[k][i],k) for k in 'ACGT'], reverse = True)
+        consensus[i] = temp[0][1]
+        
+    return ''.join(consensus), counts
