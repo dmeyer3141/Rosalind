@@ -1,0 +1,45 @@
+'''
+Full problem description at http://rosalind.info/problems/lia/
+
+Given: Two positive integers k (k≤7) and N (N≤2k). In this problem, we begin with Tom, who in the 0th generation has genotype Aa Bb. Tom has two children in the 1st generation, each of whom has two children, and so on. Each organism always mates with an organism having genotype Aa Bb.
+Return: The probability that at least N Aa Bb organisms will belong to the k-th generation of Tom's family tree (don't count the Aa Bb mates at each level). Assume that Mendel's second law holds for the factors.
+'''
+    
+#AA x Aa ->  0.5 AA + 0.5Aa + 0   aa
+#Aa x Aa ->  0.25AA + 0.5Aa + 0.25aa
+#aa x Aa ->  0   AA + 0.5Aa + 0.5 aa
+
+#dot product of [AA,Aa,aa] proportion in parent generation with:
+#               [0.5, 0.25, 0]  -> AA in child gen
+#               [0.5, 0.5, 0.5] -> Aa in child gen
+#               [0, 0.25, 0.5]  -> aa in child gen
+
+#distribution should stabilize at 1AA:2Aa:1aa verify with:
+def prob_dist(k):
+    dist = [0,1,0]
+    probs = [
+        [0.5, 0.25, 0],
+        [0.5, 0.5, 0.5],
+        [0, 0.25, 0.5]
+    ]
+    for i in range(k):
+        dist = [sum([dist[i]*probs[j][i] for i in range(len(dist))])for j in range(len(probs))]
+    return dist
+
+#assert prob_dist(1) == [0.25,0.5,0.25]
+#assert prob_dist(100) == [0.25,0.5,0.25]
+#assert prob_dist(100000) == [0.25,0.5,0.25]
+#dist stable at [0.25,0.5,0.25] after 1, 100 and 100000 generations
+
+#p(AaBb) offspring = p(Aa)^2 = 0.5^2 = 0.25
+#because stable distributions, 0.25 holds regardless of k
+
+from math import factorial as f
+def prob_calc(k,N):
+    def nCr(n,r):
+        return int(f(n)/f(r)/f(n-r))
+    
+    pop_size = 2**k
+    #add up prob(exactly x AaBb individuals) -> prob(fewer than x AaBb individuals)
+    #1-prob(fewer than x) = prob(at least x AaBb)
+    return 1-sum([nCr(pop_size,x)*0.25**x*0.75**(pop_size-x) for x in range(N)])
