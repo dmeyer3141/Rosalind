@@ -1,0 +1,33 @@
+'''
+Full Problem description at http://rosalind.info/problems/grph/
+Given: A collection of DNA strings in FASTA format having total length at most 10 kbp.
+Return: The adjacency list corresponding to O3 (3 base pair overlap). You may return edges in any order.
+'''
+def Fasta(code):
+    def separate(F):
+        temp = F.split('\n')
+        return temp[0], ''.join(temp[1:])
+    
+    file = open('rosalind_'+code+'.txt', 'r')
+    text = dict([separate(x) for x in file.read().split('>') if x!=''])
+    file.close()
+    
+    return text
+
+def overlaps(dist = 3):
+    #read input file into dict object
+    #keys: 'Rosalind_????' where ???? is unique id number of sequence
+    #values: sequence text
+    seqs = Fasta('grph')
+    
+    #check all possible pairs of sequences 
+    #to check if end of one matches beginning of another
+    file = open('rosalind_grph_out.txt','w')
+    for key1 in seqs:
+        for key2 in seqs:
+            if key1 != key2 and seqs[key1][-dist:] == seqs[key2][:dist]:
+                file.write(key1+' '+key2+'\n')
+    file.close()
+
+#driver
+overlaps()
