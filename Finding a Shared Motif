@@ -1,0 +1,38 @@
+'''
+Full problem description at http://rosalind.info/problems/lcsm/
+
+Given: A collection of k (k≤100) DNA strings of length at most 1 kbp each in FASTA format.
+Return: A longest common substring of the collection. (If multiple solutions exist, you may return any single solution.)
+'''
+
+def Fasta(code):
+    def separate(F):
+        temp = F.split('\n')
+        return temp[0], ''.join(temp[1:])
+    
+    file = open('rosalind_'+code+'.txt', 'r')
+    text = dict([separate(x) for x in file.read().split('>') if x!=''])
+    file.close()
+    return text
+
+def substrings(seq):
+    #fill res with all unique substrings present in seq
+    res = set()
+    for i in range(1,len(seq)+1):
+        for j in range(len(seq)-i+1):
+            res.add(seq[j:j+i])
+    return res
+
+def common_sub():
+#load sequences from input file
+    dna = list(Fasta('lcsm').values())
+    
+#use substrings function to find all common substrings between first two sequences
+    subs = substrings(dna[0]).intersection(substrings(dna[1]))
+    
+#looking at each other sequence, remove unshared substrings from set
+    for i in range(2,len(dna)):
+        subs = {x for x in subs if x in dna[i]}
+    
+#return longest substring present in final common substring set
+    return sorted(list(subs), key = len, reverse = True)[0]
