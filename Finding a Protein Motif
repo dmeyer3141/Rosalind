@@ -1,0 +1,39 @@
+'''
+Full problem description at http://rosalind.info/problems/mprt/
+
+Given: At most 15 UniProt Protein Database access IDs.
+Return: For each protein possessing the N-glycosylation motif, output its given access ID followed by a list of locations in the protein string where the motif can be found.
+'''
+
+import urllib
+
+def motif_loc():
+    def is_mot(prot):
+        return len(prot) == 4 and prot[0] == 'N' and prot[1] not in 'P' and prot[2] in 'ST' and prot[3] not in 'P' 
+    
+  #extract protein ids from input file
+    file = open('rosalind_mprt.txt', 'r')
+    ids = [x for x in file.read().split('\n') if x!='']
+    file.close()
+    
+  #for each protein id:
+  #go to uniprot.org to acquire full protein sequence
+  #list all indexes of N-glyco motif in sequence
+  #then add list of indexes to locs dict using protein id as key
+    locs = {}
+    for prt_id in ids:
+        link = 'https://www.uniprot.org/uniprot/'+prt_id+'.fasta'
+        f = urllib.request.urlopen(link)
+        prt = ''.join(str(f.read()).split('\\n')[1:-1])
+        f.close()
+        
+        mots = [str(i+1) for i in range(len(prt)-3) if is_mot(prt[i:i+4])]
+        if len(mots) > 0:
+            locs[prt_id] = mots
+    
+  #write to output file each protein id and locations of N-glyco motif within it
+    file = open('rosalind_mprt_out.txt', 'w')
+    for key in locs:
+        file.write(key+'\n')
+        file.write(' '.join(locs[key])+'\n')
+    file.close()
