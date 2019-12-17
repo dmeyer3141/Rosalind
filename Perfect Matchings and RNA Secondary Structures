@@ -1,0 +1,26 @@
+'''
+Full problem description at http://rosalind.info/problems/pmch/
+
+Given: An RNA string s of length at most 80 bp having the same number of occurrences of 'A' as 'U' and the same number of occurrences of 'C' as 'G'.
+Return: The total possible number of perfect matchings of basepair edges in the bonding graph of s.
+'''
+
+#suppose string is AAUU
+#A at pos 0,1; U at pos 2,3
+#2 possible matches: 0-2,1-3; 0-3,1-2
+
+#suppose AAAUUU
+#A at 0,1,2; U at 3,4,5
+#6 possible matches: 3 * 2 * 1 possible matches
+#first A matches with any of 3 U locs; second A with any of 2 remaining Us and so on
+
+#For a sequence with n A and U, n! possible matchings
+#GC match up independently, so if sequence has x G/C and y A/U
+#x! * y ! total matchings
+
+from math import factorial as fact
+#rna string copied from input file
+rna= 'UCGCGUUCAGUUUCAUGCAAGGGCGCGUACUGACACAGACUCUAGGCAACGUAUGGCUCCUCGCUAGGAA'
+at = len([x for x in rna if x == 'A'])
+gc = int(len(rna)/2) - at
+print(fact(at)*fact(gc))
