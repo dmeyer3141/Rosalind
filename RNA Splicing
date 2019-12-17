@@ -1,0 +1,37 @@
+'''
+Full problem description at http://rosalind.info/problems/splc/
+
+Given: A DNA string s (of length at most 1 kbp) and a collection of substrings of s acting as introns. All strings are given in FASTA format.
+Return: A protein string resulting from transcribing and translating the exons of s. (Note: Only one solution will exist for the dataset provided.)
+'''
+CODON = {'UUU' : 'F','CUU' : 'L','AUU' : 'I','GUU' : 'V','UUC' : 'F','CUC' : 'L','AUC' : 'I','GUC' : 'V','UUA' : 'L','CUA' : 'L','AUA' : 'I','GUA' : 'V','UUG' : 'L','CUG' : 'L','AUG' : 'M','GUG' : 'V','UCU' : 'S','CCU' : 'P','ACU' : 'T','GCU' : 'A','UCC' : 'S','CCC' : 'P','ACC' : 'T','GCC' : 'A','UCA' : 'S','CCA' : 'P','ACA' : 'T','GCA' : 'A','UCG' : 'S','CCG' : 'P','ACG' : 'T','GCG' : 'A','UAU' : 'Y','CAU' : 'H','AAU' : 'N','GAU' : 'D','UAC' : 'Y','CAC' : 'H','AAC' : 'N','GAC' : 'D','UAA' : ' ','CAA' : 'Q','AAA' : 'K','GAA' : 'E','UAG' : ' ','CAG' : 'Q','AAG' : 'K','GAG' : 'E','UGU' : 'C','CGU' : 'R','AGU' : 'S','GGU' : 'G','UGC' : 'C','CGC' : 'R','AGC' : 'S','GGC' : 'G','UGA' : ' ','CGA' : 'R','AGA' : 'R','GGA' : 'G','UGG' : 'W','CGG' : 'R','AGG' : 'R','GGG' : 'G'}
+
+def Fasta(code):
+    #read Fasta formatted sequences
+    #return list of sequences with full DNA string at index 0 and introns in subsequent indexes
+    def separate(F):
+        temp = F.split('\n')
+        return temp[0], ''.join(temp[1:])
+    
+    file = open('C:/Users/Douglas/Downloads/rosalind_'+code+'.txt', 'r')
+    text = [separate(x)[1] for x in file.read().split('>') if x!='']
+    file.close()    
+    return text
+
+def splice_trans():
+  #read sequence/intron data from file
+    seq,*dna = Fasta('splc')
+    
+  #list locations of all introns in seq (start/end points of exons)    
+    locs = sorted([(seq.find(dna[i]),len(dna[i])) for i in range(len(dna))])
+    locs.insert(0,(0,0))
+    locs.append((len(seq),0))
+
+  #merge list of exons (substrings present between beginning of seq, introns and end of seq)
+  #replace 'T' with 'U' to convert spliced DNA string to RNA
+    exons = ''.join([seq[sum(locs[i]):locs[i+1][0]] for i in range(len(locs)-1)])
+    rna = ''.join([x if x != 'T' else 'U' for x in exons])
+
+  #Translate spliced rna into amino acid string
+  #return substring from start codon to first stop codon
+    return ''.join([CODON[rna[i:i+3]] for i in range(rna.find('AUG'),len(rna),3) if len(rna[i:i+3]) == 3]).split(' ')[0]
