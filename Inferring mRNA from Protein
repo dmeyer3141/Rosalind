@@ -1,0 +1,19 @@
+'''
+Full problem description at http://rosalind.info/problems/mrna/
+
+Given: A protein string of length at most 1000 aa.
+Return: The total number of different RNA strings from which the protein could have been translated, modulo 1,000,000. (Don't neglect the importance of the stop codon in protein translation.)
+'''
+
+def modulo_possible(base = 1000000):
+  #read protein sequence from file
+    file = open('rosalind_mrna.txt', 'r')
+    prot = file.read().split('\n')[0]
+    file.close()
+    
+  #compute number of possible RNA strings modulo 1000000
+    prot_codon = {'F': ['UUU', 'UUC'], 'L': ['CUU', 'CUC', 'UUA', 'CUA', 'UUG', 'CUG'], 'I': ['AUU', 'AUC', 'AUA'], 'V': ['GUU', 'GUC', 'GUA', 'GUG'], 'M': ['AUG'], 'S': ['UCU', 'UCC', 'UCA', 'UCG', 'AGU', 'AGC'], 'P': ['CCU', 'CCC', 'CCA', 'CCG'], 'T': ['ACU', 'ACC', 'ACA', 'ACG'], 'A': ['GCU', 'GCC', 'GCA', 'GCG'], 'Y': ['UAU', 'UAC'], 'H': ['CAU', 'CAC'], 'N': ['AAU', 'AAC'], 'D': ['GAU', 'GAC'], ' ': ['UAA', 'UAG', 'UGA'], 'Q': ['CAA', 'CAG'], 'K': ['AAA', 'AAG'], 'E': ['GAA', 'GAG'], 'C': ['UGU', 'UGC'], 'R': ['CGU', 'CGC', 'CGA', 'AGA', 'CGG', 'AGG'], 'G': ['GGU', 'GGC', 'GGA', 'GGG'], 'W': ['UGG']}
+    val = 1
+    for aa in prot:           
+        val = (val*len(prot_codon[aa])) % base
+    return 3*val % base #3 multiplier comes from number of possible stop codons
