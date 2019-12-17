@@ -1,0 +1,16 @@
+'''
+Full problem description at http://rosalind.info/problems/prob/
+
+Given: A DNA string s of length at most 100 bp and an array A containing at most 20 numbers between 0 and 1.
+Return: An array B having the same length as A in which B[k] represents the common logarithm of the probability that a random string constructed with the GC-content found in A[k] will match s exactly.
+'''
+from math import log10 as log
+def log_prob(dna, gc):
+    return sum([log(gc/2) if x in 'GCgc' else log((1-gc)/2) for x in dna])
+
+#dna and line copied from input file rosalind_prob.txt
+dna = 'GCTATCGAACATCCGTCATAAGAGGACGCCGTACCCAGGATGTCCCGTTCTGGTCATCATGAGCCATGAAGAGTTGGAGA'
+line = '0.092 0.165 0.235 0.267 0.349 0.363 0.440 0.514 0.558 0.619 0.683 0.720 0.786 0.873 0.906' 
+
+#for each gc proportion provided in line, compute log of probability of generating given dna sequence
+print(' '.join(['%.3f' % log_prob(dna,float(x)) for x in line.split(' ')]))
