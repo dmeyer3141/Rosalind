@@ -1,0 +1,46 @@
+
+'''
+Full problem description at http://rosalind.info/problems/lgis/
+
+Given: A positive integer n≤10000 followed by a permutation π of length n.
+Return: A longest increasing subsequence of π, followed by a longest decreasing subsequence of π.
+'''
+
+import bisect as bi
+
+def order_subseq(seq,decrease = False):
+  #finds longest increase subsequence; to find longest decreasing sequence reverse input seq
+    if decrease:
+        seq.reverse()
+    
+  #sub will track increasing subsequences found in seq
+  #the 'end sequence', a sequence comprised of the last value of each sequence in sub, will be increasing
+  #longest is the length of the longest increasing subsequence
+  #first value in sequence taken to initialize these values
+    sub = {1: [seq[0]]}
+    longest = 1
+    
+  #iterate through values of sequence starting with second value
+  #for each value, determine its location in the end sequence of sub (see line 17)
+  #based on location, update existing subsequence in sub or add new subsequence and increase value of longest
+    for i in range(1,len(seq)):
+        cur = seq[i]
+        ends = [sub[x][-1] for x in range(1,longest+1)]
+        b = bi.bisect_right(ends,cur)
+        if b == 0:
+            sub[1] = [cur]
+        elif b == longest:
+            longest+=1
+            sub[longest] = sub[longest-1] + [cur]
+        else: # b in 1,2,..., longest-1
+            sub[b + 1] = sub[b] + [cur]
+            
+  #to return decreasing subsequence:
+  #put seq back in original order and reverse longest subsequence
+    if decrease:
+        #put seq back in original order
+        seq.reverse()
+        sub[longest].reverse()
+        
+  #return longest increasing/decreasing subsequence as a string
+    return ' '.join([str(x) for x in sub[longest])
