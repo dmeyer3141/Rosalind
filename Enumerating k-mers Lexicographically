@@ -1,0 +1,22 @@
+'''
+Full problem description at http://rosalind.info/problems/lexf/
+
+Given: A collection of at most 10 symbols defining an ordered alphabet, and a positive integer n (n≤10).
+Return: All strings of length n that can be formed from the alphabet, ordered lexicographically (use the standard order of symbols in the English alphabet).
+'''
+
+from itertools import product
+file = open('rosalind_lexf.txt', 'r')
+lines = file.read().split('\n')
+file.close()
+
+#list all possible length n strings formable by given alphabet
+alpha = lines[0].split(' ')
+n     = int(lines[1])
+lex = sorted([''.join(i) for i in product(alpha, repeat = n)])
+
+#write strings to output file
+file = open('rosalind_lexf_out.txt', 'w')
+for item in lex:
+    file.write(item+ '\n')
+file.close()
