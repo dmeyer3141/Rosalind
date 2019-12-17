@@ -1,0 +1,36 @@
+'''
+Full problem description at http://rosalind.info/problems/revp/
+
+Given: A DNA string of length at most 1 kbp in FASTA format.
+Return: The position and length of every reverse palindrome in the string having length between 4 and 12. You may return these pairs in any order.
+'''
+
+def Fasta(code):
+    def separate(F):
+        temp = F.split('\n')
+        return temp[0], ''.join(temp[1:])
+    
+    file = open('C:/Users/Douglas/Downloads/rosalind_'+code+'.txt', 'r')
+    text = dict([separate(x) for x in file.read().split('>') if x!=''])
+    file.close()
+    
+    return text
+
+def rev_pal(low = 4, high = 12):
+    def rev_comp(seq):
+      #check if first half of seq is reverse compliment to second half
+        comp = {'A':'T', 'C':'G', 'G':'C', 'T':'A'}
+        return len(seq) % 2 == 0 and seq[:int(len(seq)/2)] == ''.join([COMP[seq[i]] for i in range(len(seq)-1,int(len(seq)/2)-1,-1)])
+  
+  #extract sequence data from input file
+    dna = list(Fasta('revp').values())[0]
+
+  #using rev_comp, check all length n substrings of dna sequence (low<=n<=hi)
+  #list index and length of any substring for which rev_comp returns True
+    c = [str(i+1)+' '+ str(leng) for leng in range(low,high+1,2) for i in range(len(dna)-leng+1) if rev_comp(dna[i:i+leng])]
+  
+  #write results to output file
+    file = open('rosalind_revp_out.txt','w')
+    file.write('\n'.join(c))
+    file.write('\n')
+    file.close()
