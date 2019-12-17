@@ -1,0 +1,33 @@
+'''
+Full problem description at http://rosalind.info/problems/sseq/
+
+Given: Two DNA strings s and t (each of length at most 1 kbp) in FASTA format.
+Return: One collection of indices of s in which the symbols of t appear as a subsequence of s. If multiple solutions exist, you may return any one.
+'''
+
+def Fasta(code):
+    #read Fasta formatted sequences
+    def separate(F):
+        temp = F.split('\n')
+        return temp[0], ''.join(temp[1:])
+    
+    file = open('rosalind_'+code+'.txt', 'r')
+    text = ([separate(x)[1] for x in file.read().split('>') if x!=''])
+    file.close()    
+    return text
+
+def subseq():
+    seq1,seq2 = Fasta('sseq')
+  #locs holds indices of seq1 in which seq2 appears as a subsequence
+    locs = ['' for i in range(len(seq2))]
+    
+  #i is index in seq1; ind2 is index in seq2 
+  #starting at beginning of seq2 and seq1, iterate through base pairs in seq1
+  #when current value in seq2 matches current value in seq1, add i to locs and move to next value in seq2
+    ind2 = 0
+    for i in range(len(seq1)):
+        if seq1[i] == seq2[ind2]:
+            locs[ind2] = str(i+1)
+            ind2+=1
+            if ind2 >= len(seq2):
+                return ' '.join(locs)
