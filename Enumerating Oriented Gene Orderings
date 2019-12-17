@@ -1,0 +1,20 @@
+'''
+Full problem description at http://rosalind.info/problems/sign/
+
+Given: A positive integer n≤6.
+Return: The total number of signed permutations of length n, followed by a list of all such permutations (you may list the signed permutations in any order)
+'''
+
+#value for n copied from rosalind_sign.txt
+n = 4
+from itertools import product
+from itertools import permutations
+sign = [x for x in product(['','-'], repeat = n)]
+val  = [[str(i) for i in x] for x in permutations(range(1,n+1))]
+
+file = open('rosalind_sign_out.txt', 'w')
+file.write(str(len(sign)*len(val)) + '\n')
+for s in sign:
+    for v in val:
+        file.write(' '.join([s[i]+v[i] for i in range(n)])+'\n')
+file.close()
