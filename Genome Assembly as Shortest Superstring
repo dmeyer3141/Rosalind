@@ -22,9 +22,9 @@ def assemble():
   #extract sequence data from input file
     seqs = Fasta('long')
     
-  #find all pairs of keys such that suffix region of 1st sequence and 2nd region of second sequence overlap by at least half the sequence length
-  #sequences are stored in dict with corresponding keys (ie dict[1st key] == 1st sequence)
-  #if pair is found, overlaps[1st key] = (2nd key,non overlapping subsequence of sequence 2)
+  #find all pairs of keys such that suffix region of 1st sequence and prefix region of 2nd sequence overlap by at least half the sequence length
+    #sequences are stored in dict with corresponding keys (ie seqs[1st key] == 1st sequence)
+  #if pair is found, overlaps[1st key] = (2nd key,non overlapping region of sequence 2)
   #add 2nd key to last set (will be used to determine the first occurring sequence in final assembly)
     overlaps = {}
     last     = set()
@@ -40,7 +40,7 @@ def assemble():
 
   #assembled genome starts with full sequence found in seqs using head as key
   #use overlaps dict to continue to next overlapping sequence, adding non-overlap region to assembly
-  #continue until reaching last sequence 
+  #repeat until reaching the foot
     (head,) = set(overlaps.keys()) - last
     (foot,) = last - set(overlaps.keys())
     chrom = seqs[head]
