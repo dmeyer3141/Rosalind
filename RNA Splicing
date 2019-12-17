@@ -13,17 +13,17 @@ def Fasta(code):
         temp = F.split('\n')
         return temp[0], ''.join(temp[1:])
     
-    file = open('C:/Users/Douglas/Downloads/rosalind_'+code+'.txt', 'r')
+    file = open('rosalind_'+code+'.txt', 'r')
     text = [separate(x)[1] for x in file.read().split('>') if x!='']
     file.close()    
     return text
 
 def splice_trans():
   #read sequence/intron data from file
-    seq,*dna = Fasta('splc')
+    seq,*intron = Fasta('splc')
     
   #list locations of all introns in seq (start/end points of exons)    
-    locs = sorted([(seq.find(dna[i]),len(dna[i])) for i in range(len(dna))])
+    locs = sorted([(seq.find(intron[i]),len(intron[i])) for i in range(len(intron))])
     locs.insert(0,(0,0))
     locs.append((len(seq),0))
 
