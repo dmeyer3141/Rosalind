@@ -12,7 +12,7 @@ n = 7
 ps = [p for p in perms(range(1,n+1))]
 
 #write all length n permutations to output file
-file = open('C:/Users/Douglas/Downloads/rosalind_perm_out.txt', 'w')
+file = open('rosalind_perm_out.txt', 'w')
 file.write(str(len(ps)))
 file.write('\n')
 for  p in ps:
