@@ -1,0 +1,15 @@
+'''
+Full problem description at http://rosalind.info/problems/pper/
+
+Given: Positive integers n and k such that 100≥n>0 and 10≥k>0.
+Return: The total number of partial permutations P(n,k), modulo 1,000,000.
+'''
+#value for n and k found in rosalind_pper.txt
+def par_perm(n,k)
+  #return P(n,k) % 1000000 = n!/(n-k)!  % 1000000
+    prod = 1
+    for v in range(n,n-k,-1):
+        prod = prod*v
+        if prod > 1000000:
+            prod = prod % 1000000
+    return prod
