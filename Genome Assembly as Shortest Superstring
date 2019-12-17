@@ -1,0 +1,52 @@
+'''
+Full problem description at http://rosalind.info/problems/long/
+
+Given: At most 50 DNA strings of approximately equal length, not exceeding 1 kbp, in FASTA format (which represent reads deriving from the same strand of a single linear chromosome).
+
+The dataset is guaranteed to satisfy the following condition: there exists a unique way to reconstruct the entire chromosome from these reads by gluing together pairs of reads that overlap by more than half their length.
+Return: A shortest superstring containing all the given strings (thus corresponding to a reconstructed chromosome).
+'''
+from math import ceil
+def Fasta(code):
+  #read Fasta formatted sequences
+    def separate(F):
+        temp = F.split('\n')
+        return temp[0], ''.join(temp[1:])
+    
+    file = open('C:/Users/Douglas/Downloads/rosalind_'+code+'.txt', 'r')
+    text = dict([separate(x) for x in file.read().split('>') if x!=''])
+    file.close()    
+    return text
+
+def assemble():
+  #extract sequence data from input file
+    seqs = Fasta('long')
+    
+  #find all pairs of keys such that suffix region of 1st sequence and 2nd region of second sequence overlap by at least half the sequence length
+  #sequences are stored in dict with corresponding keys (ie dict[1st key] == 1st sequence)
+  #if pair is found, overlaps[1st key] = (2nd key,non overlapping subsequence of sequence 2)
+  #add 2nd key to last set (will be used to determine the first occurring sequence in final assembly)
+    overlaps = {}
+    last     = set()
+    for key1 in seqs:
+        for key2 in seqs:
+            if key1 !=key2:
+                seq1 = seqs[key1]
+                seq2 = seqs[key2]
+                pre = seq1.find(seq2[:ceil(len(seq2)/2)])
+                if pre> -1 and seq1[pre:] == seq2[:len(seq1)-pre]:
+                    last.add(key2)
+                    overlaps[key1] = (key2,seq2[len(seq1[pre:]):])
+
+  #assembled genome starts with full sequence found in seqs using head as key
+  #use overlaps dict to continue to next overlapping sequence, adding non-overlap region to assembly
+  #continue until reaching last sequence 
+    (head,) = set(overlaps.keys()) - last
+    (foot,) = last - set(overlaps.keys())
+    chrom = seqs[head]
+    cur = head
+    while cur != foot:
+        nex = overlaps[cur][0]
+        chrom = chrom + overlaps[cur][1] 
+        cur = nex
+    return chrom
